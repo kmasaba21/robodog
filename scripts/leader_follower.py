@@ -15,7 +15,7 @@ class LeaderFollower:
     def __init__(self):
         rospy.init_node("leader_follower", anonymous=True)
         self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
-        self.scan_sub = rospy.Subscriber("base_scan", LaserScan, self.scan_callback, queue_size=1)
+        self.scan_sub = rospy.Subscriber("scan", LaserScan, self.scan_callback, queue_size=1)
         self.front_left = INF
         self.front_right = INF
         self.rate = rospy.Rate(100)

@@ -2,21 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8258daf-3ee9-4a3c-8747-40f3030893f1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/current-commands" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/launch/robodog.launch" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/costmap.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/mapper.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/navigator.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/operator.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/robodog.rviz" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/param/ros.yaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/leader_follower.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/localizer.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/floorplan.inc" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/office.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/office.world" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world/tutorial.inc" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/launch/robodog.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/robodog.launch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/leader_follower.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/leader_follower.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
