@@ -3,6 +3,7 @@ import rospy
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import LaserScan
 import math
+from copy import copy
 
 INF = 1000
 PI = math.pi
@@ -20,7 +21,7 @@ class LeaderFollower:
         self.front_right = INF
         self.rate = rospy.Rate(100)
         self.state = 0
-        self.initial_distance = 0
+        self.prev_distance = 0
         self.prev_lin_vel = 0.5
         self.prev_ang_vel = 0
 
@@ -28,8 +29,6 @@ class LeaderFollower:
         ranges = msg.ranges
         ang_min = msg.angle_min
         ang_max = msg.angle_max
-        rospy.logerr(ang_min)
-        rospy.logerr(ang_max)
         resolution = msg.angle_increment
         front_left = INF
         front_right = INF
@@ -38,9 +37,11 @@ class LeaderFollower:
             if ang_max - PI / 12 <= angle <= ang_max + PI / 12:
                 if ranges[i] < front_left:
                     front_left = ranges[i]
-            if ang_min <= angle < ang_min + PI / 6:
+            if ang_min <= angle < ang_min + PI / 12:
                 if ranges[i] < front_right:
                     front_right = ranges[i]
+
+        self.prev_distance = copy(self.front_left)
         self.front_left = front_left
         self.front_right = front_right
         self.make_decision()
@@ -50,11 +51,10 @@ class LeaderFollower:
         if self.front_left < SAFETY_THRESHOLD:
             self.state = STOP
             return
-        diff = self.front_left - self.initial_distance
+        diff = self.front_left - self.prev_distance
         vel = self.prev_lin_vel + diff * 10
         self.prev_lin_vel = vel
         self.prev_ang_vel = 0
-        self.initial_distance = self.front_left
         self.state = MOVE
 
     def move_foward(self, lin_vel, ang_vel):
