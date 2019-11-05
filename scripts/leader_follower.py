@@ -15,7 +15,7 @@ class LeaderFollower:
     def __init__(self):
         rospy.init_node("leader_follower", anonymous=True)
         self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
-        self.scan_sub = rospy.Subscriber("base_scan", LaserScan, self.scan_callback, queue_size=1)
+        self.scan_sub = rospy.Subscriber("scan", LaserScan, self.scan_callback, queue_size=1)
         self.front_left = INF
         self.front_right = INF
         self.rate = rospy.Rate(100)
@@ -28,12 +28,14 @@ class LeaderFollower:
         ranges = msg.ranges
         ang_min = msg.angle_min
         ang_max = msg.angle_max
+        rospy.logerr(ang_min)
+        rospy.logerr(ang_max)
         resolution = msg.angle_increment
         front_left = INF
         front_right = INF
         for i in range(len(ranges)):
             angle = ang_min + i * resolution
-            if ang_min + PI / 2 <= angle <= ang_max - PI / 2:
+            if ang_max - PI / 12 <= angle <= ang_max + PI / 12:
                 if ranges[i] < front_left:
                     front_left = ranges[i]
             if ang_min <= angle < ang_min + PI / 6:
