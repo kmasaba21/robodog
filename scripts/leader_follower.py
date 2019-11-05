@@ -5,7 +5,7 @@ from sensor_msgs.msg import LaserScan
 import math
 from copy import copy
 
-INF = 1000
+INF = 10
 PI = math.pi
 SAFETY_THRESHOLD = 0.5
 MOVE = 1
@@ -19,7 +19,7 @@ class LeaderFollower:
         self.scan_sub = rospy.Subscriber("scan", LaserScan, self.scan_callback, queue_size=1)
         self.front_left = INF
         self.front_right = INF
-        self.rate = rospy.Rate(100)
+        self.rate = rospy.Rate(10)
         self.state = 0
         self.prev_distance = 0
         self.prev_lin_vel = 0.5
@@ -34,7 +34,7 @@ class LeaderFollower:
         front_right = INF
         for i in range(len(ranges)):
             angle = ang_min + i * resolution
-            if ang_max - PI / 12 <= angle <= ang_max + PI / 12:
+            if ang_max - PI / 12 < angle < ang_max + PI / 12:
                 if ranges[i] < front_left:
                     front_left = ranges[i]
             if ang_min <= angle < ang_min + PI / 12:
