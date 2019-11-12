@@ -13,8 +13,10 @@ PI = math.pi
 SAFETY_THRESHOLD = 1.5
 MOVE = 1
 STOP = 0
-ANGLE_MIN = -7 * PI / 12.0
-ANGLE_MAX = 7 * PI / 12.0
+# ANGLE_MIN = -7 * PI / 12.0
+# ANGLE_MAX = 7 * PI / 12.0
+ANGLE_MIN = 0
+ANGLE_MAX = PI
 RADIUS = 0.4
 
 
@@ -30,9 +32,11 @@ class LeaderFollower:
         self.prev_range = 0
         self.prev_lin_vel = 0.5
         self.prev_ang_vel = 0
-        self.angle_supplement = ANGLE_MAX - math.atan2(0.1, 1.5)  # TODO to set dx and dy as parameters
-        self.ang_min = ANGLE_MIN + self.angle_supplement
-        self.ang_max = ANGLE_MAX - self.angle_supplement
+        # self.angle_supplement = ANGLE_MAX - math.atan2(0.2, 1.5)  # TODO to set dx and dy as parameters
+        self.angle_supplement = math.atan2(0.2, 1.5)
+        self.ang_min = ANGLE_MIN - self.angle_supplement
+        self.ang_max = self.angle_supplement
+        # self.ang_max = ANGLE_MAX - self.angle_supplement
         self.data_file_name = "motion_data.pickle"
 
     def scan_callback(self, msg):

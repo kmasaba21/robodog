@@ -3,7 +3,7 @@ import pickle
 from os import path
 import pandas as pd
 import matplotlib.pyplot as plt
-data_file_name="/home/masaba/.ros/motion_data.pickle"
+data_file_name="motion_data.pickle"
 
 def load_data():
     data_dict = {}
@@ -21,12 +21,19 @@ if __name__=='__main__':
     data_df.drop_duplicates(subset=['time'],keep='first',inplace=True)
     data_df['stride'] = (data_df.right-data_df.left).abs()
     data_df.sort_values(by='time',inplace=True)
+
+    scan_data = list(data_df['ranges'].values)[-5]
+    print(len(data_df['ranges'].values))
+    X=list(scan_data)
+    Y=[scan_data[k] for k in X]
     plt.figure()
-    plt.plot(data_df.time,data_df.right,'b-o')
-    plt.plot(data_df.time, data_df.left,'g-o')
-    plt.plot(data_df.time,data_df.stride,'r-o')
-    plt.xlabel("Time (s)")
-    plt.ylabel('Range(m)')
-    plt.legend(['Right','Left','Stride'])
-    plt.title("Left foot and Right foot Ranges and stride over time")
+    plt.scatter(X,Y)
     plt.show()
+    # plt.plot(data_df.time,data_df.right,'b-o')
+    # plt.plot(data_df.time, data_df.left,'g-o')
+    # plt.plot(data_df.time,data_df.stride,'r-o')
+    # plt.xlabel("Time (s)")
+    # plt.ylabel('Range(m)')
+    # plt.legend(['Right','Left','Stride'])
+    # plt.title("Left foot and Right foot Ranges and stride over time")
+    # plt.show()
