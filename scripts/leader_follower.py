@@ -37,7 +37,7 @@ class LeaderFollower:
         self.ang_min = ANGLE_MIN - self.angle_supplement
         self.ang_max = self.angle_supplement
         # self.ang_max = ANGLE_MAX - self.angle_supplement
-        self.data_file_name = "motion_data.pickle"
+        self.data_file_name = "motion_data_{}.pickle".format(rospy.Time.now().secs)
 
     def scan_callback(self, msg):
         time_s = rospy.Time.now().secs
