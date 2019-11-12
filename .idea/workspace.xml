@@ -2,14 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8258daf-3ee9-4a3c-8747-40f3030893f1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/scripts/analysis.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scripts/walk.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/robodog.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/robodog.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/current-commands" beforeDir="false" afterPath="$PROJECT_DIR$/current-commands" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/launch/robodog.launch" beforeDir="false" afterPath="$PROJECT_DIR$/launch/robodog.launch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/leader_follower.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/leader_follower.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/world/office.world" beforeDir="false" afterPath="$PROJECT_DIR$/world/office.world" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

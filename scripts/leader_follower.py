@@ -22,8 +22,9 @@ class LeaderFollower:
     def __init__(self):
         rospy.init_node("leader_follower", anonymous=True)
         self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
-        self.scan_sub = rospy.Subscriber("base_scan", LaserScan, self.scan_callback, queue_size=1)
-        self.closet_range = INF
+        # self.scan_sub = rospy.Subscriber("base_scan", LaserScan, self.scan_callback, queue_size=1)
+        self.scan_sub = rospy.Subscriber("scan", LaserScan, self.scan_callback, queue_size=1)
+        self.closest_range = INF
         self.rate = rospy.Rate(100)
         self.state = 0
         self.prev_range = 0
@@ -57,11 +58,12 @@ class LeaderFollower:
         if right_angles and left_angles:
             right_min = right_angles[min(list(right_angles))]
             left_min = left_angles[min(list(left_angles))]
-            self.prev_range = copy(self.closet_range)
-            self.closet_range = min([left_min, right_min])
+            self.prev_range = copy(self.closest_range)
+            self.closest_range = min([left_min, right_min])
             self.make_decision()
             data['right'] = right_min
             data['left'] = left_min
+            data['ranges']=front_angles
             self.add_to_file(data)
 
     def add_to_file(self, data):
@@ -86,11 +88,11 @@ class LeaderFollower:
         return data_dict
 
     def make_decision(self):
-        if self.closet_range < SAFETY_THRESHOLD:
+        if self.closest_range < SAFETY_THRESHOLD:
             self.state = STOP
             return
-        diff = self.closet_range - self.prev_range
-        vel = self.prev_lin_vel + diff * 10
+        e = self.closest_range - SAFETY_THRESHOLD
+        vel = self.prev_lin_vel + e * 10
         self.prev_lin_vel = vel
         self.prev_ang_vel = 0
         self.state = MOVE
@@ -106,6 +108,7 @@ class LeaderFollower:
             if self.state == STOP:
                 self.move_foward(0, 0)
             elif self.state == MOVE:
+                # self.move_foward(2 * self.prev_lin_vel, self.prev_ang_vel)
                 self.move_foward(2 * self.prev_lin_vel, self.prev_ang_vel)
             self.rate.sleep()
 
