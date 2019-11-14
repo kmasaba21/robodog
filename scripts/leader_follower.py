@@ -10,12 +10,12 @@ import pickle
 
 INF = 20
 PI = math.pi
-SAFETY_THRESHOLD = 1.5
+SAFETY_THRESHOLD = 1.0
 MOVE = 1
 STOP = 0
 # ANGLE_MIN = -7 * PI / 12.0
 # ANGLE_MAX = 7 * PI / 12.0
-ANGLE_MIN = 0
+ANGLE_MIN = -1*PI
 ANGLE_MAX = PI
 RADIUS = 0.4
 
@@ -23,19 +23,19 @@ RADIUS = 0.4
 class LeaderFollower:
     def __init__(self):
         rospy.init_node("leader_follower", anonymous=True)
-        self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=0)
+        self.cmd_pub = rospy.Publisher("cmd_vel", Twist, queue_size=1)
         # self.scan_sub = rospy.Subscriber("base_scan", LaserScan, self.scan_callback, queue_size=1)
         self.scan_sub = rospy.Subscriber("scan", LaserScan, self.scan_callback, queue_size=1)
         self.closest_range = INF
-        self.rate = rospy.Rate(100)
+        self.rate = rospy.Rate(10)
         self.state = 0
         self.prev_range = 0
-        self.prev_lin_vel = 0.5
+        self.prev_lin_vel = 0.1
         self.prev_ang_vel = 0
         # self.angle_supplement = ANGLE_MAX - math.atan2(0.2, 1.5)  # TODO to set dx and dy as parameters
         self.angle_supplement = math.atan2(0.2, 1.5)
-        self.ang_min = ANGLE_MIN - self.angle_supplement
-        self.ang_max = self.angle_supplement
+        #self.ang_min = ANGLE_MAX - self.angle_supplement #- PI/9
+        #self.ang_max = ANGLE_MAX + self.angle_supplement #+ PI/9
         # self.ang_max = ANGLE_MAX - self.angle_supplement
         self.data_file_name = "motion_data_{}.pickle".format(rospy.Time.now().secs)
 
@@ -45,11 +45,18 @@ class LeaderFollower:
         ranges = msg.ranges
         resolution = msg.angle_increment
         min_ang = msg.angle_min
+        max_ang= msg.angle_max
         front_angles = {}
+        m_angle=80
+        m_range=60
         for i in range(len(ranges)):
             angle = min_ang + i * resolution
-            if self.ang_min <= angle <= self.ang_max:
+            if m_range > ranges[i]:
+               m_angle=angle
+               m_range=ranges[i]
+            if PI/6-PI >= angle or angle >= PI-PI/6:
                 front_angles[angle] = ranges[i]
+        #rospy.logerr("Min Angle: {}, Range: {}".format(m_angle,m_range))
         max_angle = max(front_angles, key=front_angles.get)
         max_range = front_angles[max_angle]
         right_angles = {}
@@ -63,7 +70,10 @@ class LeaderFollower:
             right_min = right_angles[min(list(right_angles))]
             left_min = left_angles[min(list(left_angles))]
             self.prev_range = copy(self.closest_range)
-            self.closest_range = min([left_min, right_min])
+            self.closest_range = min(front_angles.values())
+            a = min(front_angles,key=front_angles.get)
+            x =  max(front_angles,key=front_angles.get)
+            rospy.logerr("Min range: {}, min angle: {} max angle: {} range: {}".format(front_angles[a],a,x,front_angles[x]))
             self.make_decision()
             data['right'] = right_min
             data['left'] = left_min
@@ -94,9 +104,10 @@ class LeaderFollower:
     def make_decision(self):
         if self.closest_range < SAFETY_THRESHOLD:
             self.state = STOP
+            #rospy.logerr("Stopping...")
             return
         e = self.closest_range - SAFETY_THRESHOLD
-        vel = self.prev_lin_vel + e * 10
+        vel =e * 1 + (e-self.prev_lin_vel)*10*1
         self.prev_lin_vel = vel
         self.prev_ang_vel = 0
         self.state = MOVE
@@ -108,12 +119,14 @@ class LeaderFollower:
         self.cmd_pub.publish(vel_msg)
 
     def spin(self):
+        vel_msg = Twist()
         while not rospy.is_shutdown():
             if self.state == STOP:
-                self.move_foward(0, 0)
+               self.move_foward(0, 0)
             elif self.state == MOVE:
-                # self.move_foward(2 * self.prev_lin_vel, self.prev_ang_vel)
-                self.move_foward(2 * self.prev_lin_vel, self.prev_ang_vel)
+               self.move_foward(self.prev_lin_vel, self.prev_ang_vel)
+               #self.move_foward(2 * self.prev_lin_vel, self.prev_ang_vel)
+            #self.cmd_pub.publish(vel_msg)
             self.rate.sleep()
 
 
