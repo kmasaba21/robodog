@@ -22,12 +22,11 @@ if __name__=='__main__':
     data_df['stride'] = (data_df.right-data_df.left).abs()
     data_df.sort_values(by='time',inplace=True)
 
-    scan_data = list(data_df['ranges'].values)[-5]
-    print(len(data_df['ranges'].values))
+    scan_data = list(data_df['ranges'].values)[0]
     X=list(scan_data)
-    Y=[scan_data[k] for k in X]
+    Y=[sca_data[k] for k in X]
     plt.figure()
-    plt.scatter(X,Y)
+    plt.plot(X,Y)
     plt.show()
     # plt.plot(data_df.time,data_df.right,'b-o')
     # plt.plot(data_df.time, data_df.left,'g-o')

@@ -30,6 +30,7 @@ class LeaderFollower:
         self.rate = rospy.Rate(10)
         self.state = 0
         self.prev_range = 0
+        self.ang_vel_error = 0
         self.prev_lin_vel = 0.1
         self.prev_ang_vel = 0
         # self.angle_supplement = ANGLE_MAX - math.atan2(0.2, 1.5)  # TODO to set dx and dy as parameters
@@ -56,6 +57,7 @@ class LeaderFollower:
                m_range=ranges[i]
             if PI/6-PI >= angle or angle >= PI-PI/6:
                 front_angles[angle] = ranges[i]
+                self.ang_vel_error = angle
         #rospy.logerr("Min Angle: {}, Range: {}".format(m_angle,m_range))
         max_angle = max(front_angles, key=front_angles.get)
         max_range = front_angles[max_angle]
@@ -107,9 +109,11 @@ class LeaderFollower:
             #rospy.logerr("Stopping...")
             return
         e = self.closest_range - SAFETY_THRESHOLD
-        vel =e * 1 + (e-self.prev_lin_vel)*10*1
+        vel = e * 1 + (e-self.prev_lin_vel)*10*1
         self.prev_lin_vel = vel
-        self.prev_ang_vel = 0
+        e_ang = self.ang_vel_error
+        ang_vel = .25 * e_ang
+        self.prev_ang_vel = ang_vel
         self.state = MOVE
 
     def move_foward(self, lin_vel, ang_vel):
