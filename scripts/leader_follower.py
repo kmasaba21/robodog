@@ -75,7 +75,8 @@ class LeaderFollower:
             self.closest_range = min(front_angles.values())
             a = min(front_angles,key=front_angles.get)
             x =  max(front_angles,key=front_angles.get)
-            rospy.logerr("Min range: {}, min angle: {} max angle: {} range: {}".format(front_angles[a],a,x,front_angles[x]))
+            rospy.logerr("{}".format(front_angles[x]))
+            #rospy.logerr("Min range: {}, min angle: {} max angle: {} range: {}".format(front_angles[a],a,x,front_angles[x]))
             self.make_decision()
             data['right'] = right_min
             data['left'] = left_min

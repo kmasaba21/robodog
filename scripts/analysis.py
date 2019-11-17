@@ -24,7 +24,7 @@ if __name__=='__main__':
 
     scan_data = list(data_df['ranges'].values)[0]
     X=list(scan_data)
-    Y=[sca_data[k] for k in X]
+    Y=[scan_data[k] for k in X]
     plt.figure()
     plt.plot(X,Y)
     plt.show()
