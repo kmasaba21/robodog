@@ -12,21 +12,6 @@ threshold_a = 6
 
 
 
-# typedef struct _CSData
-# {
-#     std::vector<unsigned int> index;//索引值
-#     std::vector<double> bearings;//角度
-#     std::vector<double> cos_value;//余弦
-#     std::vector<double> sin_value;//正弦
-# }CSdata;
-
-# typedef struct _RangeData
-# {
-#     std::vector<double> ranges;//role数值
-#     std::vector<double> xs;//x坐标
-#     std::vector<double> ys;//y坐标
-# }Rangedata;
-
 class AttrDict(dict):
   __getattr__ = dict.__getitem__
   __setattr__ = dict.__setitem__
@@ -163,19 +148,6 @@ class signal_params:
 
 
 
-# typedef struct _line
-# {
-#     double a;//直线参数
-#     double b;
-#     double c;
-#     int left;//直线范围
-#     int right;
-#     POINT p1;
-#     POINT p2;
-#     bool inte[2];
-# }line;
-
-
 
 class line:
     def __init__(self, a,b,c, left, right, p1, p2, inte):
@@ -197,19 +169,6 @@ class leastt:
         self.b = b
         self.c = c
 
-
-
-
-# typedef struct _point
-# {
-#     double role;
-#     double theta;
-#     double m_x;
-#     double m_y;
-#     double distance;
-#     double m_gradient;
-#     bool flag;
-# }PoinT;
 
 class PointT:
     def __init__(self, role, theta, m_x, m_y, distance, m_gradient, flag):
@@ -234,15 +193,6 @@ class gline:
 
 
 
-# typedef struct _signal
-# {
-#     double _angle1_radian;
-#     double _angle2_radian;
-#     double _angle1_degree;
-#     double _angle2_degree;
-#     double _role;
-# }Signal;
-
 
 class Signal:
     def __init__(self, _angle1_radian, _angle2_radian, _angle1_degree, _angle2_degree):
@@ -254,12 +204,6 @@ class Signal:
 
 
 
-# typedef struct _feature_point
-# {
-#     POINT _point;
-#     double _angle;
-# }featurepoint;
-
 
 class featurepoint:
     def __init__(self, _point, _angle):
@@ -269,14 +213,6 @@ class featurepoint:
 
 
 
-
-# typedef struct _keyword
-# {
-#     int _index_role;
-#     int _index_theta_one;
-#     int _index_theta_two;
-#     std::vector<int> _frame_index;
-# }keyword;
 
 class _keyword:
     def __init__(self, _index_role, _index_theta_one,
@@ -707,14 +643,6 @@ class LineFeature:
 if __name__ == '__main__':
     x = np.array(list(range(10)))/10
     y = gen_noisy_line(60, 0)
-
-    # plt.scatter(x,y
-    #     )
-
-    # plt.show()
-
-
-
 
 
     lf = LineFeature()
