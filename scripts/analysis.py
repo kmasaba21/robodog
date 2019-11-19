@@ -1,38 +1,139 @@
-#!/usr/bin/python
-import pickle
-from os import path
-import pandas as pd
+import numpy as np 
 import matplotlib.pyplot as plt
-data_file_name="motion_data.pickle"
+from os.path import expanduser
+import pickle
+from collections import Counter
+from math import pi
 
-def load_data():
-    data_dict = {}
-    if path.exists(data_file_name) and path.getsize(data_file_name) > 0:
-        with open(data_file_name, 'rb') as fp:
-            try:
-                data_dict = pickle.load(fp)
-            except Exception as e:
-                print("error: {}".format(e))
-    return data_dict
 
-if __name__=='__main__':
-    data_dict=load_data()
-    data_df=pd.DataFrame(data=data_dict)
-    data_df.drop_duplicates(subset=['time'],keep='first',inplace=True)
-    data_df['stride'] = (data_df.right-data_df.left).abs()
-    data_df.sort_values(by='time',inplace=True)
 
-    scan_data = list(data_df['ranges'].values)[0]
-    X=list(scan_data)
-    Y=[scan_data[k] for k in X]
-    plt.figure()
-    plt.plot(X,Y)
-    plt.show()
-    # plt.plot(data_df.time,data_df.right,'b-o')
-    # plt.plot(data_df.time, data_df.left,'g-o')
-    # plt.plot(data_df.time,data_df.stride,'r-o')
-    # plt.xlabel("Time (s)")
-    # plt.ylabel('Range(m)')
-    # plt.legend(['Right','Left','Stride'])
-    # plt.title("Left foot and Right foot Ranges and stride over time")
-    # plt.show()
+'''
+
+CODE THAT CREATES X,Y PLOT OF SCANNER DATA
+ASSUME THAT ROBOT IS LOCATED AT (0,0)
+RIGHT IS FROM 0 TO PI/2, LEFT IS FROM PI/2 TO PI
+
+
+FOR EACH DATA POINT (SCANNER READING) WE CREATE A SEPARATE PLOT AND SCALE THE AXIS ACCORDINGLY
+THE PLOTS ARE THEN USED TO GENERATE VIDEO USING video.py
+
+'''
+
+home = expanduser('~')
+desktop = home + '/Desktop/'
+
+
+with open(desktop + 'dogrobo_data/md_karim_4.pickle', 'rb') as f:
+    data = pickle.load(f)
+
+
+
+mintime = min([y['time'] for y in data])
+
+times = [y['time'] - mintime for y in data]
+
+
+cnt = Counter(times)
+
+
+plt.figure()
+
+
+plt.ylim(0, 40)
+plt.xlim(-10,10)
+
+
+def swap(x):
+    if x != np.inf:
+        return x
+    else:
+        return mx*2
+oldt=  0
+vel = 0
+
+base_vel = 4
+
+scale_y = 20
+
+
+zz = [z['ranges'] for z in data]
+
+zzz = zz[0]
+
+angles = sorted(zzz.keys())
+angles_proper = list(1/np.array(angles))
+
+
+angles = [(x,y) for x,y in zip(angles, angles_proper)]
+
+angles = sorted(angles, key=lambda xx: xx[1])
+
+
+angles_to_print = [xx[0] for xx in angles]
+
+
+scale_y_low = 0
+
+
+glob_pos = 0
+for ii in range(len(data)):
+    zzz = zz[ii]
+
+
+    t = times[ii]
+
+    dt = t - oldt
+
+    vel = base_vel/cnt[t]
+
+
+
+
+    print(ii)
+
+    glob_pos += vel
+
+    print(glob_pos)
+
+
+    values = []
+
+    x = []
+    y = []
+    yy =[]
+    bad_vals_x = []
+    bad_vals_y = []
+    for i, val in enumerate(angles_to_print):
+        angle = pi/2 + pi/6 - i*(pi/180)
+
+        valueee = zzz[val]
+
+
+        if valueee != np.inf:
+
+            print('val', valueee*np.sin(angle), glob_pos)
+            x.append(valueee*np.cos(angle) )
+            y.append(valueee*np.sin(angle) + glob_pos)
+
+
+
+    if max(y) > scale_y:
+        scale_y += 5
+        scale_y_low = scale_y_low + 5
+
+
+    plt.figure(ii)
+
+
+    plt.scatter([-3,3], [scale_y, scale_y_low], c='g')
+
+    plt.scatter(x, y, c='r')
+
+
+    plt.savefig('snaps/snapshot_' + str(ii) +'.png')
+    if dt > 0:
+        plt.savefig('video/snapshot_' + str(ii) +'.png')
+
+
+    oldt = t
+
