@@ -63,3 +63,9 @@ run the python file
 ```
 
 python leader_follower.py
+
+```
+To run without PD
+```
+
+python robodog.py
