@@ -196,7 +196,7 @@ class LeaderFollower:
                self.move_foward(0, 0)
             # if state is MOVE then send linear and angular velocities
             elif self.state == MOVE:
-               self.move_foward(self.lin_vel_error, self.ang_vel_error)
+               self.move_foward(self.lin_vel_error, 0)
 
             self.rate.sleep()
 
