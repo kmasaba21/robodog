@@ -11,12 +11,7 @@ import pickle
 INF = 20
 PI = math.pi
 SAFETY_THRESHOLD = 1.0
-<<<<<<< HEAD
-STOP_THRESHOLD=0.5
-=======
-STOP_THRESHOLD = .5
-# Robot States
->>>>>>> d6873c23713a7bcb1ed5a0f4ade4fbb8d35d6259
+STOP_THRESHOLD = 0.5
 MOVE = 1
 STOP = 0
 # ANGLE_MIN = -7 * PI / 12.0
@@ -68,12 +63,8 @@ class LeaderFollower:
             if m_range > ranges[i]:
                m_angle=angle
                m_range=ranges[i]
-<<<<<<< HEAD
-            if PI/18-PI >= angle or angle >= PI-PI/18:
-=======
 
             if FIELD_OF_VIEW+ANGLE_MIN >= angle or angle >= ANGLE_MAX-FIELD_OF_VIEW:
->>>>>>> d6873c23713a7bcb1ed5a0f4ade4fbb8d35d6259
                 front_angles[angle] = ranges[i]
 
         #rospy.logerr("Min Angle: {}, Range: {}".format(m_angle,m_range))
@@ -104,14 +95,9 @@ class LeaderFollower:
 
             a = min(front_angles,key=front_angles.get)
             x =  max(front_angles,key=front_angles.get)
-<<<<<<< HEAD
-            #rospy.logerr("{}".format(front_angles[x]))
-            rospy.logerr("Min range: {}, min angle: {} max angle: {} range: {}".format(front_angles[a],a,x,front_angles[x]))
-=======
 
             rospy.logerr("{}".format(front_angles[x]))
             #rospy.logerr("Min range: {}, min angle: {} max angle: {} range: {}".format(front_angles[a],a,x,front_angles[x]))
->>>>>>> d6873c23713a7bcb1ed5a0f4ade4fbb8d35d6259
             self.make_decision()
 
             # add all data to pickle file
@@ -145,10 +131,7 @@ class LeaderFollower:
 
     # decides state and updates error function
     def make_decision(self):
-<<<<<<< HEAD
-=======
         # if closest_range is within STOP_THRESHOLD then stop the robot
->>>>>>> d6873c23713a7bcb1ed5a0f4ade4fbb8d35d6259
         if self.closest_range < STOP_THRESHOLD:
             self.state = STOP
             #rospy.logerr("Stopping...")
@@ -157,18 +140,11 @@ class LeaderFollower:
         # update error function for linear velocity
         self.prev_lin_vel = self.lin_vel_error
         e = self.closest_range - SAFETY_THRESHOLD
-<<<<<<< HEAD
-        vel = e * 2
+        vel = e * KP + (e-self.prev_lin_vel) * RATE * KD
         if vel > 2:
             vel = 2
         if vel < -2:
-            vel = -2		
-        self.prev_lin_vel = vel
-        e_ang = self.ang_vel_error
-        ang_vel = .25 * e_ang
-        self.prev_ang_vel = ang_vel
-=======
-        vel = e * KP + (e-self.prev_lin_vel) * RATE * KD
+            vel = -2	
         self.lin_vel_error = vel
 
         # update error function for angular velocity
@@ -176,7 +152,6 @@ class LeaderFollower:
         e_ang_vel = .25 * ang_vel
         self.ang_vel_error = e_ang_vel
 
->>>>>>> d6873c23713a7bcb1ed5a0f4ade4fbb8d35d6259
         self.state = MOVE
 
     # publish the Twist message associated with the error functions
