@@ -34,7 +34,7 @@ cd to catkin_ws and source bash file
 ```
 cd catkin_ws
 source devel/setup.bash
-
+```
 
 
 
@@ -42,7 +42,6 @@ run ROS master
 ```
 screen -S core
 roscore &
-
 ```
 Press Ctrl A+D for detaching
 
@@ -61,9 +60,8 @@ roslaunch rplidar_ros rplidar.launch
 Press ctrl a+d for detaching
 ```
 
-run the python file
+run the main script for following a person and gathering their data as pickle dumps
 ```
-
 python leader_follower.py
 ```
 
