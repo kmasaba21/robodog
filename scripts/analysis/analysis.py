@@ -1,7 +1,9 @@
+import os
+import pickle
 import numpy as np 
 import matplotlib.pyplot as plt
+
 from os.path import expanduser
-import pickle
 from collections import Counter
 from math import pi
 
@@ -19,28 +21,21 @@ THE PLOTS ARE THEN USED TO GENERATE VIDEO USING video.py
 
 '''
 
-home = expanduser('~')
-desktop = home + '/Desktop/'
+folder = os.path.dirname(os.path.abspath(__file__))
+folder =  folder[:-len('scripts/analysis')] + 'data'
 
-
-with open(desktop + 'dogrobo_data/md_karim_4.pickle', 'rb') as f:
+with open(folder + '/md_karim_4.pickle', 'rb') as f:
     data = pickle.load(f)
 
 
 
 mintime = min([y['time'] for y in data])
-
 times = [y['time'] - mintime for y in data]
-
-
 cnt = Counter(times)
 
 
 plt.figure()
 
-
-plt.ylim(0, 40)
-plt.xlim(-10,10)
 
 
 def swap(x):
@@ -48,7 +43,7 @@ def swap(x):
         return x
     else:
         return mx*2
-oldt=  0
+oldt =  0
 vel = 0
 
 base_vel = 4
@@ -77,6 +72,9 @@ scale_y_low = 0
 
 glob_pos = 0
 for ii in range(len(data)):
+
+    print(ii)
+
     zzz = zz[ii]
 
 
@@ -87,9 +85,6 @@ for ii in range(len(data)):
     vel = base_vel/cnt[t]
 
 
-
-
-    print(ii)
 
     glob_pos += vel
 
@@ -110,8 +105,6 @@ for ii in range(len(data)):
 
 
         if valueee != np.inf:
-
-            print('val', valueee*np.sin(angle), glob_pos)
             x.append(valueee*np.cos(angle) )
             y.append(valueee*np.sin(angle) + glob_pos)
 
@@ -130,9 +123,18 @@ for ii in range(len(data)):
     plt.scatter(x, y, c='r')
 
 
-    plt.savefig('snaps/snapshot_' + str(ii) +'.png')
+
+    if not os.path.exists(folder + '/snaps/'):
+        os.mkdir(folder + '/snaps/')
+
+    plt.savefig(folder + '/snaps/snapshot_' + str(ii) +'.png')
+
+
+    if not os.path.exists(folder + '/video/'):
+        os.mkdir(folder + '/video/')
+
     if dt > 0:
-        plt.savefig('video/snapshot_' + str(ii) +'.png')
+        plt.savefig(folder + '/video/snapshot_' + str(ii) +'.png')
 
 
     oldt = t

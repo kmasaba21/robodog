@@ -15,57 +15,65 @@ Authors:
 
 # How to run:
 
-```
+
 Delete default ip address from routing table.
-```
 
+```
 sudo ip route del 'default ip address'
-
 ```
+
+
 ssh into the robot
 ```
 ssh husarian@'ip address'
+```
 password: husarion
 
-```
-cd to catking_ws and source bash file
-```
 
-cd catking_ws
+cd to catkin_ws and source bash file
+```
+cd catkin_ws
 source devel/setup.bash
 
-```
+
+
+
 run ROS master
 ```
-
 screen -S core
-roscore
-Press ctrl a+d for detaching
+roscore &
 
 ```
+Press Ctrl A+D for detaching
+
+
 run the node for the main board
 ```
-
 screen -S tinker
 rosrun rosbot_webui serial_bridge.sh
 Press ctrl a+d for detaching
-
 ```
+
 run the node for lidar
 ```
-
 screen -S lidar
 roslaunch rplidar_ros rplidar.launch
 Press ctrl a+d for detaching
-
 ```
+
 run the python file
 ```
 
 python leader_follower.py
-
 ```
+
 To run without PD
 ```
-
 python robodog.py
+```
+
+Analysis scripts with short descriptions can be found in ./scripts/analysis
+
+Most of the data that used and generated is located in ./data
+
+

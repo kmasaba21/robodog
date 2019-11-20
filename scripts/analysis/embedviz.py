@@ -28,8 +28,11 @@ PLEASE DON'T DELETE THE COMMENTED OUT CODE AS IT PRESENTS DIFFERENT FUNCTIONALIT
 '''
 
 
-image_folder = expanduser('~') + '/Desktop/robodata/'
-image_folder_2 = expanduser('~') + '/Desktop/dogrobo_data'
+folder = os.path.dirname(os.path.abspath(__file__))
+folder =  folder[:-len('scripts/analysis')] + 'data'
+
+image_folder = folder
+image_folder_2 = folder
 X = []
 
 

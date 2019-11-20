@@ -1,11 +1,12 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from os.path import expanduser
 import os
 import pickle
 import numpy as np
+
 from torch import optim
+from os.path import expanduser
 
 
 
@@ -44,9 +45,13 @@ class Net(nn.Module):
         return torch.zeros(1, self.hidden_size)
 
 
-image_folder = expanduser('~') + '/dogrobo_data/'
 
-home = expanduser('~')
+
+
+folder = os.path.dirname(os.path.abspath(__file__))
+folder =  folder[:-len('scripts/analysis')] + 'data'
+
+image_folder = folder + '/data/'
 
 files = [img for img in os.listdir(image_folder) if img.endswith(".pickle")]
 
@@ -57,7 +62,6 @@ for i in files:
         name = i
         break
 
-print(name)
 
 with open(os.path.join(image_folder, name), 'rb') as f:
     data = pickle.load(f)
@@ -67,6 +71,8 @@ def swap(x):
         return x
     else:
         return 12
+
+
 
 
 data = [(x['ranges'], x['time']) for x in data]
@@ -132,7 +138,7 @@ for iter in range(0, n_iters):
 
     if sum(run_loss[-5:]) < 0.1:
         for i,p in enumerate(rnn.parameters()):
-            with open(home + '/' + 'weight_karim_2_' + str(i) + '.pkl', 'wb') as f:
+            with open(folder + '/data/weight_karim_2_' + str(i) + '.pkl', 'wb') as f:
                 pickle.dump(p.data.numpy(), f)
 
 
